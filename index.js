@@ -1,3 +1,6 @@
+import 'dotenv/config';
+
+
 import express from "express";
 import pg from 'pg';
 
@@ -9,13 +12,19 @@ app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
 // Database
+// const db = new pg.Client({
+//     host: 'localhost',
+//     database: 'bookshop',
+//     user: 'david',
+//     password: 'admin',
+//     port: 5432
+// })
 const db = new pg.Client({
-    host: 'localhost',
-    database: 'bookshop',
-    user: 'david',
-    password: 'admin',
-    port: 5432
-})
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
+});
+
+console.log('DATABASE_URL exists:', Boolean(process.env.DATABASE_URL));
 
 db.connect()
     .then( () => console.log('Database connected'))
